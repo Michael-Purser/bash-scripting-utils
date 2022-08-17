@@ -1,0 +1,106 @@
+#!/bin/bash
+
+# Color codes
+
+RED="\033[31m"
+GREEN="\033[32m"
+YELLOW="\033[33m"
+BLUE="\033[34m"
+PURPLE="\033[35m"
+CYAN="\033[36m"
+
+# Modifiers
+
+BOLD="\033[1m"
+RESET="\033[0m"
+
+# ------ PRIVATE (DO NOT USE DIRECTLY) ------ #
+
+# Global variables
+
+declare -i _LOGGING_DATETIME=0
+declare -i _LOGGING_DEBUG=0
+
+# Status messages
+
+log_status()
+{
+    DATETIME=""
+    if [[ ${_LOGGING_DATETIME} -eq 1 ]]; then
+        DATETIME="[date '+%Y-%m-%d, %H:%M:%S'] "
+    fi
+    printf "${DATETIME}${1}[%s] %s${RESET}\n" "${2}" "${3}"
+}
+
+log_status_bold()
+{
+    DATETIME=""
+    if [[ ${_LOGGING_DATETIME} -eq 1 ]]; then
+        DATETIME="[$(date '+%Y-%m-%d,%H:%M:%S')] "
+    fi
+    printf "${DATETIME}${BOLD}${1}[%s] %s${RESET}\n" "${2}" "${3}"
+}
+
+# ------ PUBLIC (USE DIRECTLY IN YOUR SCRIPTS) ------ #
+
+# Set and unset global variables
+
+set_logging_datetime()
+{
+    _LOGGING_DATETIME=1
+}
+
+unset_logging_datetime()
+{
+    _LOGGING_DATETIME=0
+}
+
+set_logging_debug()
+{
+    _LOGGING_DEBUG=1
+}
+
+unset_logging_debug()
+{
+    _LOGGING_DEBUG=0
+}
+
+# Log functions
+
+log()
+{
+    printf "${RESET}%s\n" "${1}"
+}
+
+bold()
+{
+    printf "${BOLD}%s${RESET}\n" "${1}"
+}
+
+error()
+{
+    log_status_bold "${RED}" "ERROR" "${1}"
+}
+
+success()
+{
+    log_status_bold "${GREEN}" "OK   " "${1}"
+}
+
+warn()
+{
+    log_status_bold "${YELLOW}" "WARN " "${1}"
+}
+
+info()
+{
+    log_status "" "INFO " "${1}"
+}
+
+debug()
+{
+    if [[ ${_LOGGING_DEBUG} -eq 1 ]]; then
+        log_status "${CYAN}" "DEBUG" "${1}"
+    fi
+}
+
