@@ -90,7 +90,7 @@ check_integer_in_range()
 check_is_valid_ip()
 {
     ip_address="${1}"
-    debug "Checking '${variable}' is a valid IP address"
+    debug "Checking '${ip_address}' is a valid IP address"
     old_IFS="${IFS}"
     IFS='.' read -ra IP_ADDR_ARRAY <<< "${ip_address}"
     IFS="${old_IFS}"
