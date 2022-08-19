@@ -1,0 +1,49 @@
+#!/bin/bash
+
+source "${BASH_SOURCE%/*}/../logging"
+
+TEXT_OK="You should see me"
+TEXT_NOK="You should not see me!"
+TEXT_DATETIME=" with datetime info!"
+
+bold "LOGGING FUNCTIONS EXAMPLE"
+log "If you see the text '${TEXT_NOK}', then something is broken in 'logging'"
+log ""
+
+bold "Using log level debug:"
+set_logging_debug
+debug "${TEXT_OK}"
+info "${TEXT_OK}"
+warn "${TEXT_OK}"
+error "${TEXT_OK}"
+success "${TEXT_OK}"
+log ""
+
+bold "Using log level normal:"
+set_logging_normal
+debug "${TEXT_NOK}"
+info "${TEXT_OK}"
+warn "${TEXT_OK}"
+error "${TEXT_OK}"
+success "${TEXT_OK}"
+log ""
+
+bold "Using log level quiet:"
+set_logging_quiet
+debug "${TEXT_NOK}"
+info "${TEXT_NOK}"
+warn "${TEXT_NOK}"
+error "${TEXT_OK}"
+success "${TEXT_NOK}"
+log ""
+
+bold "Using log level debug AND datetime info:"
+set_logging_debug
+set_logging_datetime
+debug "${TEXT_OK}"
+info "${TEXT_OK}"
+warn "${TEXT_OK}"
+error "${TEXT_OK}"
+success "${TEXT_OK}"
+log ""
+
