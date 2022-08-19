@@ -106,3 +106,8 @@ check_is_valid_ip()
     done
 }
 
+ensure_sudo()
+{
+    sudo echo "" &>/dev/null
+}
+
