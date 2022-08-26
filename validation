@@ -7,6 +7,7 @@ ask_proceed()
     read -p "Proceed? [Y/y to proceed] " -n 1 -r
     echo ""
     if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        info "Exiting on user request"
         exit 0
     fi
 }
