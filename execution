@@ -2,21 +2,61 @@
 
 source "${BASH_SOURCE%/*}/logging"
 
-# Declare dry run variable
 
-declare -i _EXECUTE=1
+# ------ PRIVATE (DO NOT USE DIRECTLY IN YOUR SCRIPTS) ------ #
+
+# GLOBAL VARIABLES
+
+# _EXECUTION_DRY_RUN:
+#   0    Log and execute commands
+#   1    Only log commands (do not execute)
+declare -i _EXECUTION_DRY_RUN=0
+
+# _EXECUTION_QUIET:
+#   0    Print the output of commands to the terminal
+#   1    Hide the output of commands from the terminal
+declare -i _EXECUTION_QUIET=0
+
+
+# ------ PUBLIC (USE DIRECTLY IN YOUR SCRIPTS) ------ #
 
 set_dry_run()
 {
-    _EXECUTE=0
+    _EXECUTION_DRY_RUN=1
+}
+
+unset_dry_run()
+{
+    _EXECUTION_DRY_RUN=0
+}
+
+set_execute_quiet()
+{
+    _EXECUTION_QUIET=1
+}
+
+unset_execute_quiet()
+{
+    _EXECUTION_QUIET=0
 }
 
 execute()
 {
     cmd=${1}
+
     debug "${cmd}"
-    if [[ ${_EXECUTE} -ne 0 ]]; then
-        eval "${cmd}"
+
+    if [[ ${_LOGGING_TO_FILE} -ne 0 ]]; then
+        cmd="${cmd} 2>&1 | tee -a ${_LOGGING_FILE}"
+    fi
+
+    if [[ ${_EXECUTION_QUIET} -ne 0 ]]; then
+        cmd="${cmd} >/dev/null"
+    fi
+
+    if [[ ${_EXECUTION_DRY_RUN} -ne 1 ]]; then
+        eval "${cmd}; "'PIPE=${PIPESTATUS[0]}'
+        return ${PIPE}
     fi
 }
 
