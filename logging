@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # COLOR CODES
-
 RED="\033[31m"
 GREEN="\033[32m"
 YELLOW="\033[33m"
@@ -10,7 +9,6 @@ PURPLE="\033[35m"
 CYAN="\033[36m"
 
 # MODIFIERS
-
 BOLD="\033[1m"
 RESET="\033[0m"
 
@@ -30,6 +28,15 @@ SUC_STR="SUCCESS"
 #   1    Add datetime information to log messages
 declare -i _LOGGING_DATETIME=0
 
+# _LOGGING_FILE:
+#  Path to the file to log to
+declare _LOGGING_FILE=""
+
+# _LOGGING_TO_FILE:
+#   0    Do not log to file
+#   1    Log to file, providing the file is set and exists
+declare -i _LOGGING_TO_FILE=0
+
 # _LOGGING_VERBOSITY:
 #   0    Quiet mode: Only output error messages
 #   1    Normal mode: Output error, warn, info, success messages
@@ -45,7 +52,12 @@ log_status()
     if [[ ${_LOGGING_DATETIME} -eq 1 ]]; then
         DATETIME="[$(date '+%Y-%m-%d,%H:%M:%S')] "
     fi
-    printf "${DATETIME}${1}[%s] %s${RESET}\n" "${2}" "${3}"
+
+    if [[ ${_LOGGING_TO_FILE} -eq 1 ]]; then
+        printf "${DATETIME}${1}[%s] %s${RESET}\n" "${2}" "${3}" 2>&1 | tee -a "${_LOGGING_FILE}"
+    else
+        printf "${DATETIME}${1}[%s] %s${RESET}\n" "${2}" "${3}"
+    fi
 }
 
 log_status_bold()
@@ -54,7 +66,12 @@ log_status_bold()
     if [[ ${_LOGGING_DATETIME} -eq 1 ]]; then
         DATETIME="[$(date '+%Y-%m-%d,%H:%M:%S')] "
     fi
-    printf "${DATETIME}${BOLD}${1}[%s] %s${RESET}\n" "${2}" "${3}"
+
+    if [[ ${_LOGGING_TO_FILE} -eq 1 ]]; then
+        printf "${DATETIME}${BOLD}${1}[%s] %s${RESET}\n" "${2}" "${3}" 2>&1 | tee -a "${_LOGGING_FILE}"
+    else
+        printf "${DATETIME}${BOLD}${1}[%s] %s${RESET}\n" "${2}" "${3}"
+    fi
 }
 
 # ------ PUBLIC (USE DIRECTLY IN YOUR SCRIPTS) ------ #
@@ -86,6 +103,36 @@ set_logging_normal()
 set_logging_debug()
 {
     _LOGGING_VERBOSITY=2
+}
+
+# SET/UNSET LOG FILE AND LOG TO FILE
+
+set_logging_to_file()
+{
+    _LOGGING_FILE="${1}"
+    if [[ -f ${_LOGGING_FILE} ]]; then
+        echo "Cannot log to file: file '${_LOGGING_FILE}' already exists"
+        return 1
+    fi
+
+    touch "${_LOGGING_FILE}"
+
+    if [[ $? -ne 0 ]]; then
+        echo "Cannot log to file: file '${_LOGGING_FILE}' cannot be created"
+        return 1
+    fi
+
+    _LOGGING_TO_FILE=1
+}
+
+unset_logging_file()
+{
+    _LOGGING_FILE=""
+}
+
+unset_logging_to_file()
+{
+    _LOGGING_TO_FILE=0
 }
 
 # LOGGING FUNCTIONS
