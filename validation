@@ -95,6 +95,26 @@ check_is_integer()
     fi
 }
 
+check_integer_greater_than()
+{
+    variable="${1}"
+    lower="${2}"
+    debug "Checking integer '${variable}' is greater than ${lower}"
+    if [ "$1" -le "${lower}" ]; then
+        error "Integer not greater than ${lower}: ${variable}" && exit 1
+    fi
+}
+
+check_integer_less_than()
+{
+    variable="${1}"
+    upper="${2}"
+    debug "Checking integer '${variable}' is less than ${upper}"
+    if [ "$1" -ge "${upper}" ]; then
+        error "Integer not less than ${upper}: ${variable}" && exit 1
+    fi
+}
+
 check_integer_in_range()
 {
     variable="${1}"
