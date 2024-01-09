@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# ------ PUBLIC (USE IN YOUR SCRIPTS) ------ #
+
+# SET THE OWNER AND GROUP OF A FILE
+
+set_owner_and_group()
+{
+  local file="${1}"
+  local owner="${2}"
+  local group="${3}"
+
+  execute "sudo chown -R ${owner}:${group} ${file}"
+}
+
+# GET FILESIZE IN BYTES
+
+get_size_in_bytes()
+{
+  local file="${1}"
+
+  local size=$(du -B 1 "${file}" | awk '{print $1}')
+  echo "${size}"
+}

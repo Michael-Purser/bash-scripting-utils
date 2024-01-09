@@ -2,6 +2,7 @@
 
 # Source bash-scripting-utils
 source "${BASH_SOURCE%/*}/execution"
+source "${BASH_SOURCE%/*}/filesystem"
 source "${BASH_SOURCE%/*}/logging"
 source "${BASH_SOURCE%/*}/time"
 source "${BASH_SOURCE%/*}/validation"
