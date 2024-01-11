@@ -115,6 +115,12 @@ set_logging_to_file()
         return 1
     fi
 
+    local log_file_directory=$(realpath $(dirname ${_LOGGING_FILE}))
+    if [[ ! -d "${log_file_directory}" ]]; then
+        echo "Log file directory does not exist: ${log_file_directory} - creating directory"
+        mkdir -p "${log_file_directory}"
+    fi
+
     touch "${_LOGGING_FILE}"
 
     if [[ $? -ne 0 ]]; then
