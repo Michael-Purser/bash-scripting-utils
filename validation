@@ -33,11 +33,14 @@ check_array_contains()
   shift
   local array=("$@")
 
-  local regex="\<${value}\>"
-  if [[ ! "${array[@]}" =~ $regex ]]; then
-    return 1
-  fi
-  return 0
+  local match=1
+  for array_element in "${array[@]}"; do
+    if [[ "${array_element}" == "${value}" ]]; then
+      match=0
+    fi
+  done
+
+  return ${match}
 }
 
 check_does_not_contain_character()
