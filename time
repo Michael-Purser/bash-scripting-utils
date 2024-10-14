@@ -18,6 +18,6 @@ log_elapsed_time_s()
     local start_time_ms="${1}"
     local end_time_ms="${2}"
 
-    info "Elapsed: $(echo "scale=3;(${end_time_ms} - ${start_time_ms})/(1*10^03)" | bc) seconds"
+    info "elapsed: $(echo "scale=3;(${end_time_ms} - ${start_time_ms})/(1*10^03)" | bc) seconds"
 }
 
