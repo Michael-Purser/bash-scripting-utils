@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Source guard
+[[ -n "${_BASH_SCRIPTING_UTILS_FILESYSTEM}" ]] && return; readonly _BASH_SCRIPTING_UTILS_FILESYSTEM=1
+
 # ------ PUBLIC (USE IN YOUR SCRIPTS) ------ #
 
 # SET THE OWNER AND GROUP OF A FILE

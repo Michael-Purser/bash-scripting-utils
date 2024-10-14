@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Source guard
+[[ -n "${_BASH_SCRIPTING_UTILS_LOGGING}" ]] && return; readonly _BASH_SCRIPTING_UTILS_LOGGING=1
+
 # COLOR CODES
 RED="\033[31m"
 GREEN="\033[32m"
